@@ -47,7 +47,6 @@ import net.runelite.client.util.ColorUtil;
 
 class AgilityOverlay extends Overlay
 {
-	private static final int MAX_DISTANCE = 2350;
 	private static final Color SHORTCUT_HIGH_LEVEL_COLOR = Color.ORANGE;
 
 	private final Client client;
@@ -85,8 +84,7 @@ class AgilityOverlay extends Overlay
 			}
 
 			Tile tile = obstacle.getTile();
-			if (tile.getPlane() == client.getPlane()
-				&& object.getLocalLocation().distanceTo(playerLocation) < MAX_DISTANCE)
+			if (tile.getPlane() == client.getPlane())
 			{
 				// This assumes that the obstacle is not clickable.
 				if (Obstacles.TRAP_OBSTACLE_IDS.contains(object.getId()))
@@ -168,8 +166,7 @@ class AgilityOverlay extends Overlay
 
 	private void highlightTile(Graphics2D graphics, LocalPoint playerLocation, Tile tile, Color color)
 	{
-		if (tile.getPlane() == client.getPlane() && tile.getItemLayer() != null
-			&& tile.getLocalLocation().distanceTo(playerLocation) < MAX_DISTANCE)
+		if (tile.getPlane() == client.getPlane() && tile.getItemLayer() != null)
 		{
 			final Polygon poly = tile.getItemLayer().getCanvasTilePoly();
 
