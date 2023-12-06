@@ -178,6 +178,7 @@ public class ClientUI
 		this.clientThreadProvider = clientThreadProvider;
 		this.eventBus = eventBus;
 		this.safeMode = safeMode;
+		title = "HotLite";
 		this.title = title + (safeMode ? " (safe mode)" : "");
 	}
 
