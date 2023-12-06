@@ -452,43 +452,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.16.0</version>
-				<dependencies>
-					<dependency>
-						<groupId>net.sourceforge.pmd</groupId>
-						<artifactId>pmd-core</artifactId>
-						<version>6.44.0</version>
-					</dependency>
-					<dependency>
-						<groupId>net.sourceforge.pmd</groupId>
-						<artifactId>pmd-java</artifactId>
-						<version>6.44.0</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<failOnViolation>true</failOnViolation>
-					<printFailingErrors>true</printFailingErrors>
-					<rulesets>
-						<ruleset>${basedir}/pmd-ruleset.xml</ruleset>
-					</rulesets>
-					<linkXRef>false</linkXRef>
-					<analysisCache>true</analysisCache>
-					<excludes>
-						<exclude>**/RuntimeTypeAdapterFactory.java</exclude>
-						<exclude>net/runelite/client/party/Party.java</exclude>
-					</excludes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
 				<version>2.2.6</version>
