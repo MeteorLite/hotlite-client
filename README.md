@@ -1,4 +1,12 @@
 ![](https://runelite.net/img/logo.png)
+
+# hotlite  
+This repo enables you to use your own client build with the RuneLite / Jagex launchers. 
+(After setting up hotlite-launcher)
+
+Simply build using Maven install, then run Export (net.runelite.client).  
+hotlite will then run by default from the launcher as long as the live api version is compatible with the last exported build.  
+
 # runelite [![CI](https://github.com/runelite/runelite/workflows/CI/badge.svg)](https://github.com/runelite/runelite/actions?query=workflow%3ACI+branch%3Amaster) [![Discord](https://img.shields.io/discord/301497432909414422.svg)](https://discord.gg/ArdAhnN)
 
 RuneLite is a free, open source OldSchool RuneScape client.
