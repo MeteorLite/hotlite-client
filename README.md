@@ -1,7 +1,7 @@
 ![](https://runelite.net/img/logo.png)
 
 # hotlite  
-This repo enables you to use your own client build with the RuneLite / Jagex launchers. 
+This repo enables you to use your own client build with the RuneLite / Jagex launchers.  
 (After setting up hotlite-launcher)
 
 Simply build using Maven install, then run Export (net.runelite.client).  
