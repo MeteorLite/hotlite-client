@@ -241,9 +241,9 @@ public class RuneLite
 				ClassPreloader.preload();
 			}, "Preloader").start();
 
-			final boolean developerMode = options.has("developer-mode") && RuneLiteProperties.getLauncherVersion() == null;
+			final boolean developerMode = true;
 
-			if (developerMode)
+/*			if (developerMode)
 			{
 				boolean assertions = false;
 				assert assertions = true;
@@ -256,7 +256,7 @@ public class RuneLite
 							.open());
 					return;
 				}
-			}
+			}*/
 
 			log.info("RuneLite {} (launcher version {}) starting up, args: {}",
 				RuneLiteProperties.getVersion(), MoreObjects.firstNonNull(RuneLiteProperties.getLauncherVersion(), "unknown"),
