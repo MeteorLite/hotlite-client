@@ -32,6 +32,9 @@ import javax.inject.Inject;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
+
+import net.runelite.api.Client;
+import net.runelite.api.Skill;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
@@ -44,14 +47,17 @@ class LapCounterOverlay extends OverlayPanel
 	private final AgilityPlugin plugin;
 	private final AgilityConfig config;
 
+	private final Client client;
+
 	@Inject
-	private LapCounterOverlay(AgilityPlugin plugin, AgilityConfig config)
+	private LapCounterOverlay(AgilityPlugin plugin, AgilityConfig config, Client client)
 	{
 		super(plugin);
 		setPosition(OverlayPosition.TOP_LEFT);
 		setPriority(OverlayPriority.LOW);
 		this.plugin = plugin;
 		this.config = config;
+		this.client = client;
 		addMenuEntry(RUNELITE_OVERLAY_CONFIG, OPTION_CONFIGURE, "Agility overlay");
 		addMenuEntry(RUNELITE_OVERLAY, AGILITY_RESET, "Agility overlay", e -> plugin.setSession(null));
 	}
@@ -84,10 +90,17 @@ class LapCounterOverlay extends OverlayPanel
 			.right(Integer.toString(session.getTotalLaps()))
 			.build());
 
-		if (config.lapsToLevel() && session.getLapsTillGoal() > 0)
+		if (config.lapsToLevel() && session.getLapsTillLevel() > 0) {
+			panelComponent.getChildren().add(LineComponent.builder()
+					.left("Laps until " + (session.getCurrentLevel() + 1) + ":")
+					.right(Integer.toString(session.getLapsTillLevel()))
+					.build());
+		}
+
+		if (config.lapsToLevel() && session.getLapsTillGoal() > 0 && !session.isGoalIsNextLevel())
 		{
 			panelComponent.getChildren().add(LineComponent.builder()
-				.left("Laps until goal:")
+				.left("Laps until " + session.getGoalLevel() + ":")
 				.right(Integer.toString(session.getLapsTillGoal()))
 				.build());
 		}

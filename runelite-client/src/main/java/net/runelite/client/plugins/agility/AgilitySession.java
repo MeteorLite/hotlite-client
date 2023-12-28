@@ -28,6 +28,7 @@ import com.google.common.collect.EvictingQueue;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.Client;
+import net.runelite.api.Experience;
 import net.runelite.api.Skill;
 import net.runelite.client.plugins.xptracker.XpTrackerService;
 import java.time.Duration;
@@ -44,6 +45,11 @@ class AgilitySession
 	private final EvictingQueue<Duration> lastLapTimes = EvictingQueue.create(30);
 	private int lapsPerHour;
 
+	private int lapsTillLevel;
+	private int currentLevel;
+	private int goalLevel;
+	private boolean goalIsNextLevel;
+
 	AgilitySession(Courses course)
 	{
 		this.course = course;
@@ -56,7 +62,9 @@ class AgilitySession
 		++totalLaps;
 
 		final int currentExp = client.getSkillExperience(Skill.AGILITY);
+		final int levelXp = Experience.getXpForLevel(client.getRealSkillLevel(Skill.AGILITY) + 1);
 		final int goalXp = xpTrackerService.getEndGoalXp(Skill.AGILITY);
+		final int levelRemainingXp = levelXp - currentExp;
 		final int goalRemainingXp = goalXp - currentExp;
 		double courseTotalExp = course.getTotalXp();
 		if (course == Courses.PYRAMID)
@@ -66,6 +74,10 @@ class AgilitySession
 			courseTotalExp += Math.min(300 + 8 * client.getRealSkillLevel(Skill.AGILITY), 1000);
 		}
 
+		currentLevel = Experience.getLevelForXp(currentExp);
+		goalLevel = Experience.getLevelForXp(goalXp);
+		goalIsNextLevel = currentLevel == goalLevel - 1;
+		lapsTillLevel = levelRemainingXp > 0 ? (int) Math.ceil(levelRemainingXp / courseTotalExp) : 0;
 		lapsTillGoal = goalRemainingXp > 0 ? (int) Math.ceil(goalRemainingXp / courseTotalExp) : 0;
 	}
 
