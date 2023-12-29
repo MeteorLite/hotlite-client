@@ -270,6 +270,9 @@ public class PluginManager
 		List<Class<?>> plugins = classPath.getTopLevelClassesRecursive(PLUGIN_PACKAGE).stream()
 			.map(ClassInfo::load)
 			.collect(Collectors.toList());
+		plugins.addAll(classPath.getTopLevelClassesRecursive("hotlite.plugins").stream()
+				.map(ClassInfo::load)
+				.collect(Collectors.toList()));
 		plugins.addAll(classPath.getTopLevelClassesRecursive("com.example").stream()
 				.map(ClassInfo::load)
 				.collect(Collectors.toList()));

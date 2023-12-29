@@ -41,6 +41,7 @@
 		<git.commit.id.abbrev>nogit</git.commit.id.abbrev>
 		<git.dirty>false</git.dirty>
 		<shade.skip>false</shade.skip>
+		<kotlin.version>1.9.22</kotlin.version>
 	</properties>
 
 	<dependencies>
@@ -322,6 +323,13 @@
 			<artifactId>cfr</artifactId>
 			<version>0.152</version>
 		</dependency>
+
+		<!-- hotlite -->
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib</artifactId>
+			<version>${kotlin.version}</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -489,6 +497,30 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-maven-plugin</artifactId>
+				<version>${kotlin.version}</version>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>test-compile</id>
+						<goals>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirs>
+						<sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+					</sourceDirs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
