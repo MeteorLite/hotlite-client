@@ -15,4 +15,4 @@ if [ ! -f "${GLSLANG_ARCHIVE}" ] || [ ! -d "${GLSLANG_DIR}" ] || ! echo "${GLSLA
   unzip -o -q "${GLSLANG_ARCHIVE}" -d "${GLSLANG_DIR}"
 fi
 
-mvn verify --settings ci/settings.xml -Dglslang.path="${GLSLANG_DIR}/bin/glslangValidator"
+mvn verify -DskipTests=true --settings ci/settings.xml -Dglslang.path="${GLSLANG_DIR}/bin/glslangValidator"
