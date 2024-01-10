@@ -7,7 +7,7 @@ import java.nio.file.StandardCopyOption;
 
 public class Export {
     public static void main(String[] args) throws IOException {
-        String version = "1.10.18.1";
+        String version = "1.10.18.2";
 
         File hotliteDir = new File(System.getProperty("user.home") + "/.runelite/hotlite/" + version + "/");
         hotliteDir.mkdirs();
