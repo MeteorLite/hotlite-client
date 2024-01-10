@@ -1,5 +1,7 @@
 package net.runelite.client;
 
+import net.runelite.http.api.RuneLiteAPI;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 
 public class Export {
     public static void main(String[] args) throws IOException {
-        String version = "1.10.18.2";
+        String version = RuneLiteProperties.getVersion();
 
         File hotliteDir = new File(System.getProperty("user.home") + "/.runelite/hotlite/" + version + "/");
         hotliteDir.mkdirs();

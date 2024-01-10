@@ -234,4 +234,23 @@ public abstract class Overlay implements LayoutableRenderableEntity
 	{
 		menuEntries.remove(new OverlayMenuEntry(action, option, target));
 	}
+
+	//These help play nice with kotlin
+
+	public Rectangle getBounds() {
+		return bounds;
+	}
+
+	public void setPreferredLocation(Point preferredLocation) {
+		this.preferredLocation = preferredLocation;
+	}
+
+
+	public void setPreferredSize(Dimension preferredSize) {
+		this.preferredSize = preferredSize;
+	}
+
+	public void setLayer(OverlayLayer layer) {
+		this.layer = layer;
+	}
 }

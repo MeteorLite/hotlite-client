@@ -131,8 +131,10 @@ public class EventBus
 					}
 				}
 
+/*
 				final String preferredName = "on" + parameterClazz.getSimpleName();
 				Preconditions.checkArgument(method.getName().equals(preferredName), "Subscribed method " + method + " should be named " + preferredName);
+*/
 
 				method.setAccessible(true);
 				Consumer<Object> lambda = null;
