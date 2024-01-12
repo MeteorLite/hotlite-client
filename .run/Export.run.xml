@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Export" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="net.runelite.client.Export" />
+    <module name="client" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="net.runelite.client.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2" />
+  </configuration>
+</component>

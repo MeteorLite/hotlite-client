@@ -1,4 +1,4 @@
-package hotlite.ext
+package ext.runelite
 
 import com.example.InteractionApi.InventoryInteraction
 import net.runelite.api.widgets.Widget

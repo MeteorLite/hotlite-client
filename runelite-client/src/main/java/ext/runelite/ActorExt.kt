@@ -1,5 +1,7 @@
-package hotlite.ext
+package ext.runelite
 
+import ext.java.Graphics2DExt.drawColor
+import ext.java.Graphics2DExt.fillColor
 import hotlite.Colors
 import net.runelite.api.Actor
 import java.awt.Color
@@ -14,12 +16,10 @@ object ActorExt {
     ) {
         canvasTilePoly?.let {
             if (drawFill) {
-                graphics.color = fillColor
-                graphics.fill(it)
+                graphics.fillColor(fillColor, it)
             }
             if (drawBounds) {
-                graphics.color = boundsColor
-                graphics.draw(it)
+                graphics.drawColor(boundsColor, it)
             }
         }
     }

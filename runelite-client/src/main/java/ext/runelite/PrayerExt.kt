@@ -1,4 +1,4 @@
-package hotlite.ext
+package ext.runelite
 
 import com.example.InteractionApi.PrayerInteraction
 import net.runelite.api.Prayer
