@@ -2,7 +2,7 @@ package hotlite.plugins.example
 
 import com.google.inject.Inject
 import com.google.inject.Provides
-import hotlite.ext.NPCExt.interact
+import ext.runelite.NPCExt.interact
 import net.runelite.api.GameState
 import net.runelite.api.Player
 import net.runelite.api.events.*

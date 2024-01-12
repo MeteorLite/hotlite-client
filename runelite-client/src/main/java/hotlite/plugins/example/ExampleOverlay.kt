@@ -1,6 +1,6 @@
 package hotlite.plugins.example
 
-import hotlite.ext.ActorExt.renderTile
+import ext.runelite.ActorExt.renderTile
 import net.runelite.client.ui.overlay.Overlay
 import net.runelite.client.ui.overlay.OverlayLayer
 import net.runelite.client.ui.overlay.OverlayPosition
