@@ -28,4 +28,8 @@ object TileObjectExt {
             }
         }
     }
+
+    fun<T: TileObject> Iterable<T>.withID(vararg ids: Int) : List<T> {
+        return filter { ids.contains(it.id) }
+    }
 }

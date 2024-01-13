@@ -16,7 +16,7 @@ object Graphics2DExt {
     }
 
     fun Color.fillColor() : Color {
-        return Color(this.red, this.green, this.blue, 150)
+        return Color(this.red, this.green, this.blue, 80)
     }
 
     fun Color.darkerFillColor() : Color {

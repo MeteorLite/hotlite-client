@@ -150,7 +150,7 @@ public class NpcAggroAreaPlugin extends Plugin
 	protected void startUp() throws Exception
 	{
 		overlayManager.add(overlay);
-		overlayManager.add(notWorkingOverlay);
+		//overlayManager.add(notWorkingOverlay);
 		npcNamePatterns = NAME_SPLITTER.splitToList(config.npcNamePatterns());
 		recheckActive();
 	}
@@ -160,7 +160,7 @@ public class NpcAggroAreaPlugin extends Plugin
 	{
 		removeTimer();
 		overlayManager.remove(overlay);
-		overlayManager.remove(notWorkingOverlay);
+		//overlayManager.remove(notWorkingOverlay);
 		Arrays.fill(safeCenters, null);
 		lastPlayerLocation = null;
 		endTime = null;
