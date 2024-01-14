@@ -62,6 +62,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import javax.swing.SwingUtilities;
+
 import joptsimple.ArgumentAcceptingOptionSpec;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -705,4 +706,8 @@ public class RuneLite
 		okHttpClientBuilder.sslSocketFactory(sc.getSocketFactory(), trustManager);
 	}
 	// endregion
+
+	public static Injector getInjector() {
+		return injector;
+	}
 }

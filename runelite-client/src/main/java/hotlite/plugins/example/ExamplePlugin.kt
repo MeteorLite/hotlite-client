@@ -19,12 +19,10 @@ import net.runelite.client.ui.overlay.OverlayManager
 )
 class ExamplePlugin : Plugin() {
 
+    @Inject val overlay = ExampleOverlay()
+    @Inject lateinit var overlayManager: OverlayManager
+
     val players = ArrayList<Player>()
-
-    val overlay = ExampleOverlay(this)
-
-    @Inject
-    lateinit var overlayManager: OverlayManager
 
     override fun startUp() {
         overlayManager.add(overlay)
@@ -34,38 +32,31 @@ class ExamplePlugin : Plugin() {
         overlayManager.remove(overlay)
     }
 
-
-    @Subscribe
-    fun onGameTick(event: GameTick) {
+    @Subscribe fun onGameTick(event: GameTick) {
         println("Game Tick")
     }
 
-    @Subscribe
-    fun onGameStateChanged(event: GameStateChanged) {
+    @Subscribe fun onGameStateChanged(event: GameStateChanged) {
         if (event.gameState == GameState.LOADING)
             players.clear()
     }
 
-    @Subscribe
-    fun onNPCSpawned(event: NpcSpawned) {
+
+    @Subscribe fun onNPCSpawned(event: NpcSpawned) {
         when (event.npc.name) {
             "impossible" -> event.npc.interact("something")
         }
     }
 
-    @Subscribe
-    fun onPlayerSpawned(event: PlayerSpawned) {
+    @Subscribe fun onPlayerSpawned(event: PlayerSpawned) {
         players.add(event.player)
     }
 
-    @Subscribe
-    fun onPlayerDespawned(event: PlayerDespawned) {
+    @Subscribe fun onPlayerDespawned(event: PlayerDespawned) {
         players.remove(event.player)
     }
 
-
-    @Provides
-    fun getConfig(configManager: ConfigManager): ExampleConfig {
+    @Provides fun getConfig(configManager: ConfigManager): ExampleConfig {
         return configManager.getConfig(ExampleConfig::class.java)
     }
 }

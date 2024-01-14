@@ -12,4 +12,10 @@ object NPCExt {
         return filter { ids.contains(it.id) }
     }
 
+    /**
+     * Good for calls such as
+     */
+    fun NPC.isOf(vararg ids: Int) : Boolean {
+        return ids.contains(id)
+    }
 }
