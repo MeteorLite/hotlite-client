@@ -1,5 +1,6 @@
 package ext.runelite
 
+import com.example.EthanApiPlugin.EthanApiPlugin
 import com.example.InteractionApi.NPCInteraction
 import net.runelite.api.NPC
 
@@ -12,10 +13,11 @@ object NPCExt {
         return filter { ids.contains(it.id) }
     }
 
-    /**
-     * Good for calls such as
-     */
     fun NPC.isOf(vararg ids: Int) : Boolean {
         return ids.contains(id)
+    }
+    
+    fun NPC.getRawAnimation() : Int {
+        return EthanApiPlugin.getAnimation(this)
     }
 }
