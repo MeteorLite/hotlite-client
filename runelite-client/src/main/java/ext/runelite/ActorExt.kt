@@ -1,8 +1,8 @@
 package ext.runelite
 
-import ext.ExtUtil.getInstance
 import ext.java.Graphics2DExt.drawColor
 import ext.java.Graphics2DExt.fillColor
+import ext.kotlin.KClassExt.getInstance
 import hotlite.Colors
 import net.runelite.api.Actor
 import net.runelite.api.NPC

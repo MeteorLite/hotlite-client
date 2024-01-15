@@ -1,6 +1,6 @@
 package ext.runelite
 
-import ext.ExtUtil.getInstance
+import ext.kotlin.KClassExt.getInstance
 import net.runelite.api.Client
 import net.runelite.api.Perspective
 import net.runelite.api.Projectile
