@@ -41,7 +41,6 @@
 		<git.commit.id.abbrev>nogit</git.commit.id.abbrev>
 		<git.dirty>false</git.dirty>
 		<shade.skip>false</shade.skip>
-		<kotlin.version>1.9.22</kotlin.version>
 	</properties>
 
 	<dependencies>

@@ -48,6 +48,8 @@
 		<glslang.path></glslang.path>
 
 		<rs.version>219</rs.version>
+		<!--HotLite-->
+		<kotlin.version>1.9.22</kotlin.version>
 	</properties>
 
 	<licenses>
@@ -228,27 +230,6 @@
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>delombok</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.5.0</version>
-				<configuration>
-					<!-- Javadoc the delombok sources -->
-					<sourcepath>${project.build.directory}/delombok</sourcepath>
-					<sourcepath>${project.build.sourceDirectory}:${project.build.directory}/generated-sources/kotlin</sourcepath>
-				</configuration>
-				<!-- maven-release-plugin runs maven-javadoc-plugin:jar as one of its
-				     release steps, so we will run it as well for the CI. Note this
-				     defaults to disabled due to the maven.javadoc.skip property above. -->
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
