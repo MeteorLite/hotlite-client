@@ -1,11 +1,15 @@
 ![](https://runelite.net/img/logo.png)
 
 # hotlite  
-This repo enables you to use your own client build with the RuneLite / Jagex launchers.  
-(After setting up hotlite-launcher)
-
-Simply build using Maven install, then run Export (net.runelite.client).  
-hotlite will then run by default from the launcher as long as the live api version is compatible with the last exported build.  
+Using hotlite-launcher, you can run custom RuneLite builds with the official Jagex/RuneLite launchers even using jagex accounts.  
+This is done by swapping/adding jars on the classpath in the launcher before the client is ran.  
+There is a build config included in the launcher project but you must manually replace RuneLite.jar with hotlites in your RuneLite Launcher installation directory.  
+Because we use runelites official injected-client, we MUST maintain api consistency with the current live release of RuneLite.  
+hotlite-client provides a Build/Export run config to update a hotlite-client build for hotlite-launcher  
+If there is no exported hotlite for the current runelite release, a warning box will inform the user, and vanilla runelite will be launched instead.  
+  
+Kotlin 1.9.22 support is bundled into the launcher/client.  
+Ethans API is bundled.  
 
 # runelite [![CI](https://github.com/runelite/runelite/workflows/CI/badge.svg)](https://github.com/runelite/runelite/actions?query=workflow%3ACI+branch%3Amaster) [![Discord](https://img.shields.io/discord/301497432909414422.svg)](https://discord.gg/ArdAhnN)
 
