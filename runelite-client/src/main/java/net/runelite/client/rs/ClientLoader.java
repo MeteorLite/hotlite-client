@@ -46,16 +46,15 @@ import java.nio.file.StandardOpenOption;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
+
+import hotlite.patch.PatchManager;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.RuneLite;
@@ -169,6 +168,10 @@ public class ClientLoader implements Supplier<Applet>
 				// create the classloader for the jar while we hold the lock, and eagerly load and link all classes
 				// in the jar. Otherwise the jar can change on disk and can break future classloads.
 				classLoader = createJarClassLoader(jarFile);
+
+				if (PATCHED_CACHE.exists()) {
+					PatchManager.INSTANCE.init(PATCHED_CACHE.getAbsolutePath(), classLoader);
+				}
 			}
 
 			SplashScreen.stage(.465, "Starting", "Starting Old School RuneScape");
