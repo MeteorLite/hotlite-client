@@ -35,4 +35,17 @@ object TileObjectExt {
     fun TileObject.isOf(vararg ids: Int) : Boolean {
         return ids.contains(id)
     }
+
+    fun TileObject.isOf(vararg names: String) : Boolean {
+        return names.contains(client.getObjectDefinition(id).name) || names.contains(
+            client.getObjectDefinition(id).impostor.name)
+    }
+
+    fun<T: TileObject> Iterable<T>.withIDs(vararg ids: Int) : List<T> {
+        return filter { ids.contains(it.id) }
+    }
+
+    fun<T: TileObject> Iterable<T>.withNames(vararg names: String) : List<T> {
+        return filter { it.isOf(*names) }
+    }
 }

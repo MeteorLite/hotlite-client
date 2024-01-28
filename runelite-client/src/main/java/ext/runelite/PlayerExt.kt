@@ -17,4 +17,8 @@ object PlayerExt {
     fun Player.getRawPathLength() : Int {
         return EthanApiPlugin.pathLength(this)
     }
+
+    fun Player.isOf(vararg names: String) : Boolean {
+        return names.contains(name)
+    }
 }

@@ -11,4 +11,17 @@ object WallObjectExt {
     fun WallObject.isOf(vararg ids: Int) : Boolean {
         return ids.contains(id)
     }
+
+    fun WallObject.isOf(vararg names: String) : Boolean {
+        return names.contains(client.getObjectDefinition(id).name) || names.contains(
+            client.getObjectDefinition(id).impostor.name)
+    }
+
+    fun<T: WallObject> Iterable<T>.withIDs(vararg ids: Int) : List<T> {
+        return filter { ids.contains(it.id) }
+    }
+
+    fun<T: WallObject> Iterable<T>.withNames(vararg names: String) : List<T> {
+        return filter { it.isOf(*names) }
+    }
 }
