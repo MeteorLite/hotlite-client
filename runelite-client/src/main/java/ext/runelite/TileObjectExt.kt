@@ -3,12 +3,15 @@ package ext.runelite
 import com.example.InteractionApi.TileObjectInteraction
 import ext.java.Graphics2DExt.drawColor
 import ext.java.Graphics2DExt.fillColor
+import ext.kotlin.KClassExt.getInstance
 import hotlite.Colors
+import net.runelite.api.Client
 import net.runelite.api.TileObject
 import java.awt.Color
 import java.awt.Graphics2D
 
 object TileObjectExt {
+    val client = Client::class.getInstance()
     fun TileObject.interact(vararg actions: String) {
         TileObjectInteraction.interact(this, *actions)
     }
@@ -29,7 +32,7 @@ object TileObjectExt {
         }
     }
 
-    fun<T: TileObject> Iterable<T>.withID(vararg ids: Int) : List<T> {
-        return filter { ids.contains(it.id) }
+    fun TileObject.isOf(vararg ids: Int) : Boolean {
+        return ids.contains(id)
     }
 }
