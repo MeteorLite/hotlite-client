@@ -1,8 +1,9 @@
 package ext.runelite
 
 import ext.kotlin.KClassExt.getInstance
-import ext.runelite.SceneExt.getObjects
+import ext.runelite.SceneExt.objects
 import net.runelite.api.Client
+import net.runelite.api.Scene
 import net.runelite.api.WallObject
 
 object WallObjectExt {
@@ -26,13 +27,11 @@ object WallObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    @JvmStatic
     fun WallObject.Companion.withIDs(vararg ids: Int) : List<WallObject> {
-        return client.scene.getObjects().filterIsInstance<WallObject>().filter { it.isOf(*ids)}
+        return Scene.objects.filterIsInstance<WallObject>().filter { it.isOf(*ids)}
     }
 
-    @JvmStatic
     fun WallObject.Companion.withNames(vararg names: String) : List<WallObject> {
-        return client.scene.getObjects().filterIsInstance<WallObject>().filter { it.isOf(*names)}
+        return Scene.objects.filterIsInstance<WallObject>().filter { it.isOf(*names)}
     }
 }

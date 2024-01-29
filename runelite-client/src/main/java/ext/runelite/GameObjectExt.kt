@@ -1,10 +1,11 @@
 package ext.runelite
 
 import ext.kotlin.KClassExt.getInstance
-import ext.runelite.SceneExt.getObjects
+import ext.runelite.SceneExt.objects
 import net.runelite.api.Client
 import net.runelite.api.DynamicObject
 import net.runelite.api.GameObject
+import net.runelite.api.Scene
 import java.awt.Rectangle
 
 object GameObjectExt {
@@ -41,13 +42,11 @@ object GameObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    @JvmStatic
     fun GameObject.Companion.withIDs(vararg ids: Int) : List<GameObject> {
-        return client.scene.getObjects().filterIsInstance<GameObject>().filter { it.isOf(*ids)}
+        return Scene.objects.filterIsInstance<GameObject>().filter { it.isOf(*ids)}
     }
 
-    @JvmStatic
     fun GameObject.Companion.withNames(vararg names: String) : List<GameObject> {
-        return client.scene.getObjects().filterIsInstance<GameObject>().filter { it.isOf(*names)}
+        return Scene.objects.filterIsInstance<GameObject>().filter { it.isOf(*names)}
     }
 }

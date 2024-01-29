@@ -4,9 +4,10 @@ import com.example.InteractionApi.TileObjectInteraction
 import ext.java.Graphics2DExt.drawColor
 import ext.java.Graphics2DExt.fillColor
 import ext.kotlin.KClassExt.getInstance
-import ext.runelite.SceneExt.getObjects
+import ext.runelite.SceneExt.objects
 import hotlite.Colors
 import net.runelite.api.Client
+import net.runelite.api.Scene
 import net.runelite.api.TileObject
 import java.awt.Color
 import java.awt.Graphics2D
@@ -50,13 +51,11 @@ object TileObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    @JvmStatic
     fun TileObject.Companion.withIDs(vararg ids: Int) : List<TileObject> {
-        return client.scene.getObjects().filter { it.isOf(*ids)}
+        return Scene.objects.filter { it.isOf(*ids)}
     }
 
-    @JvmStatic
     fun TileObject.Companion.withNames(vararg names: String) : List<TileObject> {
-        return client.scene.getObjects().filter { it.isOf(*names)}
+        return Scene.objects.filter { it.isOf(*names)}
     }
 }

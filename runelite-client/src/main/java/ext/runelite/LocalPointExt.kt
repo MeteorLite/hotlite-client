@@ -10,6 +10,6 @@ object LocalPointExt {
     fun LocalPoint.tile() : Tile? {
         if (x > (104 * 128) || y > (104 * 128) || x < 0 || y < 0)
             return null
-        return client.scene.tiles[client.plane][x / 128][x / 128]
+        return client.scene.tiles[client.plane]!![x / 128]!![x / 128]
     }
 }

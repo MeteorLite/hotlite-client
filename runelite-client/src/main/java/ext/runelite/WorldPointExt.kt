@@ -10,6 +10,6 @@ object WorldPointExt {
     fun WorldPoint.tile() : Tile? {
         if (x > 104 || y > 104 || x < 0 || y < 0)
             return null
-        return client.scene.tiles[client.plane][x - client.baseX][y - client.baseY]
+        return client.scene.tiles[client.plane]!![x - client.baseX]!![y - client.baseY]
     }
 }
