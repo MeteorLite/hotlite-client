@@ -2,6 +2,7 @@ package ext.runelite
 
 import ext.kotlin.KClassExt.getInstance
 import ext.runelite.DecorativeObjectExt.isOf
+import ext.runelite.DequeExt.withID
 import ext.runelite.GameObjectExt.isOf
 import ext.runelite.GroundObjectExt.isOf
 import ext.runelite.NPCCompositionExt.isOf
@@ -14,11 +15,11 @@ import net.runelite.api.*
 object SceneExt {
     val client = Client::class.getInstance()
 
-    inline fun<reified T : TileObject> Scene.Companion.objects() : ArrayList<T> {
-        val objects = ArrayList<T>()
+    inline fun<reified T : TileObject> Scene.Companion.objects() : List<T> {
+        val objects = HashSet<T>()
         client.scene.tiles.forEach { it?.forEach { it?.forEach {
             when (T::class) {
-                GameObject::class -> it?.gameObjects?.forEach { objects.add(it as T) }
+                GameObject::class -> it?.gameObjects?.filterNotNull()?.forEach { objects.add(it as T) }
                 DecorativeObject::class -> it?.decorativeObject?.let { objects.add(it as T) }
                 GroundObject::class -> it?.groundObject?.let { objects.add(it as T) }
                 WallObject::class -> it?.wallObject?.let { objects.add(it as T) }
@@ -30,7 +31,7 @@ object SceneExt {
                 }
             }
         } }}
-        return objects
+        return objects.toList()
     }
 
     fun Scene.Companion.objectsWithID(vararg ids: Int) : List<TileObject> {
@@ -73,5 +74,9 @@ object SceneExt {
         return client.npcs.filter {
             it.isOf(*names)
         }
+    }
+
+    fun Scene.Companion.projectilesWithID(vararg ids: Int) : List<Projectile> {
+        return client.projectiles.withID(*ids)
     }
 }

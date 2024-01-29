@@ -22,56 +22,46 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.api;
-
-import javax.annotation.Nullable;
+package net.runelite.api
 
 /**
  * Represents a non-player character in the game.
  */
-public interface NPC extends Actor
-{
-	/**
-	 * Gets the ID of the NPC.
-	 *
-	 * @return the ID of the NPC
-	 * @see NpcID
-	 */
-	int getId();
+interface NPC : Actor {
+    /**
+     * Gets the ID of the NPC.
+     *
+     * @return the ID of the NPC
+     * @see NpcID
+     */
+    val id: Int
+    override fun getName(): String?
+    override fun getCombatLevel(): Int
 
-	@Override
-	String getName();
+    /**
+     * Gets the index position of this NPC in the clients cached
+     * NPC array.
+     *
+     * @return the NPC index
+     * @see Client.getCachedNPCs
+     */
+    val index: Int
 
-	@Override
-	int getCombatLevel();
+    /**
+     * Gets the composition of this NPC.
+     *
+     * @return the composition
+     */
+    val composition: NPCComposition
 
-	/**
-	 * Gets the index position of this NPC in the clients cached
-	 * NPC array.
-	 *
-	 * @return the NPC index
-	 * @see Client#getCachedNPCs()
-	 */
-	int getIndex();
+    /**
+     * Get the composition for this NPC and transform it if required
+     *
+     * @return the transformed NPC
+     */
+    val transformedComposition: NPCComposition?
+    val modelOverrides: NpcOverrides?
+    val chatheadOverrides: NpcOverrides?
 
-	/**
-	 * Gets the composition of this NPC.
-	 *
-	 * @return the composition
-	 */
-	NPCComposition getComposition();
-
-	/**
-	 * Get the composition for this NPC and transform it if required
-	 *
-	 * @return the transformed NPC
-	 */
-	@Nullable
-	NPCComposition getTransformedComposition();
-
-	@Nullable
-	NpcOverrides getModelOverrides();
-
-	@Nullable
-	NpcOverrides getChatheadOverrides();
+    companion object
 }

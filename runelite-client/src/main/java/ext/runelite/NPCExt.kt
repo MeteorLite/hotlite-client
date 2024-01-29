@@ -2,12 +2,15 @@ package ext.runelite
 
 import com.example.EthanApiPlugin.EthanApiPlugin
 import com.example.InteractionApi.NPCInteraction
+import ext.kotlin.KClassExt.getInstance
 import ext.runelite.NPCCompositionExt.isOf
+import net.runelite.api.Client
 import net.runelite.api.NPC
 import net.runelite.api.Player
 import net.runelite.api.SkullIcon
 
 object NPCExt {
+    val client = Client::class.getInstance()
     fun NPC.interact(vararg actions: String) {
         NPCInteraction.interact(this, *actions)
     }
@@ -32,11 +35,19 @@ object NPCExt {
         return EthanApiPlugin.getSkullIcon(this)
     }
 
-    fun<T: NPC> Iterable<T>.withID(vararg ids: Int) : List<T> {
+    fun<T: NPC> Iterable<T>.filterID(vararg ids: Int) : List<T> {
         return filter { ids.contains(it.id) }
     }
 
-    fun<T: NPC> Iterable<T>.withName(vararg names: String) : List<T> {
+    fun<T: NPC> Iterable<T>.filterName(vararg names: String) : List<T> {
         return filter { it.composition.isOf(*names) }
+    }
+
+    fun NPC.Companion.withID(vararg ids: Int) : List<NPC> {
+        return client.npcs.filter { it.isOf(*ids) }
+    }
+
+    fun NPC.Companion.withName(vararg names: String) : List<NPC> {
+        return client.npcs.filter { it.isOf(*names) }
     }
 }

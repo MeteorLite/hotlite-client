@@ -14,7 +14,7 @@ object ProjectileExt {
     val client = Client::class.getInstance()
 
     fun Projectile.screenPoint(graphics: Graphics2D) : Point {
-        val point = LocalPoint(getX().toInt(), getY().toInt())
+        val point = LocalPoint(x.toInt(), y.toInt())
         val textLocation = Perspective.getCanvasTextLocation(client, graphics, point, "", 0)
         return Point(textLocation.x, textLocation.y)
     }
@@ -25,5 +25,13 @@ object ProjectileExt {
         graphics.drawOval(point.x - radius, point.y - radius, 2 * radius, 2 * radius)
         graphics.color = fillColor
         graphics.fillOval(point.x - radius, point.y - radius, 2 * radius, 2 * radius)
+    }
+
+    fun Projectile.isOf(vararg ids: Int) : Boolean {
+        return ids.contains(id)
+    }
+
+    fun Projectile.Companion.withID(vararg ids: Int): List<Projectile> {
+        return client.projectiles.filter { it.isOf(*ids) }
     }
 }
