@@ -1,6 +1,7 @@
 package ext.runelite
 
 import ext.kotlin.KClassExt.getInstance
+import ext.runelite.SceneExt.getObjects
 import net.runelite.api.Client
 import net.runelite.api.DynamicObject
 import net.runelite.api.GameObject
@@ -32,11 +33,21 @@ object GameObjectExt {
         return names.contains(client.getObjectDefinition(id).name) || names.contains(client.getObjectDefinition(id).impostor.name)
     }
 
-    fun<T: GameObject> Iterable<T>.withIDs(vararg ids: Int) : List<T> {
+    fun<T: GameObject> Iterable<T>.filterIDs(vararg ids: Int) : List<T> {
         return filter { ids.contains(it.id) }
     }
 
-    fun<T: GameObject> Iterable<T>.withNames(vararg names: String) : List<T> {
+    fun<T: GameObject> Iterable<T>.filterNames(vararg names: String) : List<T> {
         return filter { it.isOf(*names) }
+    }
+
+    @JvmStatic
+    fun GameObject.Companion.withIDs(vararg ids: Int) : List<GameObject> {
+        return client.scene.getObjects().filterIsInstance<GameObject>().filter { it.isOf(*ids)}
+    }
+
+    @JvmStatic
+    fun GameObject.Companion.withNames(vararg names: String) : List<GameObject> {
+        return client.scene.getObjects().filterIsInstance<GameObject>().filter { it.isOf(*names)}
     }
 }

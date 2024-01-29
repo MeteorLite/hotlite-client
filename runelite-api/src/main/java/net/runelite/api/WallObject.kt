@@ -22,46 +22,59 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.api;
+package net.runelite.api
 
-import java.awt.Shape;
+import java.awt.Shape
 
 /**
- * Represents a decorative object, such as an object on a wall.
+ * Represents one or two walls on a tile
  */
-public interface DecorativeObject extends TileObject
-{
-	/**
-	 * Gets the convex hull of the objects model.
-	 *
-	 * @return the convex hull
-	 * @see net.runelite.api.model.Jarvis
-	 */
-	Shape getConvexHull();
-	Shape getConvexHull2();
+interface WallObject : TileObject {
+    /**
+     * A bitfield with the orientation of the first wall
+     * 1 = West
+     * 2 = North
+     * 4 = East
+     * 8 = South
+     * 16 = North-west
+     * 32 = North-east
+     * 64 = South-east
+     * 128 = South-west
+     */
+    val orientationA: Int
 
-	Renderable getRenderable();
-	Renderable getRenderable2();
+    /**
+     * A bitfield with the orientation of the second wall
+     * 1 = West
+     * 2 = North
+     * 4 = East
+     * 8 = South
+     * 16 = North-west
+     * 32 = North-east
+     * 64 = South-east
+     * 128 = South-west
+     */
+    val orientationB: Int
 
-	/**
-	 * Decorative object x offset. This is added to the x position of the object, and is used to
-	 * account for walls of varying widths.
-	 */
-	int getXOffset();
+    /**
+     * A bitfield containing various flags:
+     * <pre>`object type id = bits & 0x20
+     * orientation (0-3) = bits >>> 6 & 3
+     * supports items = bits >>> 8 & 1
+    `</pre> *
+     */
+    val config: Int
 
-	/**
-	 * Decorative object y offset. This is added to the z position of the object, and is used to
-	 * account for walls of varying widths.
-	 */
-	int getYOffset();
+    /**
+     * Gets the convex hull of the objects model.
+     *
+     * @return the convex hull
+     * @see net.runelite.api.model.Jarvis
+     */
+    val convexHull: Shape?
+    val convexHull2: Shape?
+    val renderable1: Renderable?
+    val renderable2: Renderable?
 
-	/**
-	 * A bitfield containing various flags:
-	 * <pre>{@code
-	 * object type id = bits & 0x20
-	 * orientation (0-3) = bits >>> 6 & 3
-	 * supports items = bits >>> 8 & 1
-	 * }</pre>
-	 */
-	int getConfig();
+    companion object
 }

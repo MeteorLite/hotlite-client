@@ -41,7 +41,7 @@ object ActorExt {
             modelOutlineRenderer.drawOutline(this, borderWidth, boundsColor, outlineFeather)
     }
 
-    fun<T: Actor> Iterable<T>.withName(vararg names: String) : List<T> {
+    fun<T: Actor> Iterable<T>.filterNames(vararg names: String) : List<T> {
         return filter { names.contains(it.name) }
     }
 }

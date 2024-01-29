@@ -22,60 +22,45 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.api;
+package net.runelite.api
 
-import java.awt.Shape;
+import java.awt.Shape
 
 /**
- * Represents one or two walls on a tile
+ * Represents a decorative object, such as an object on a wall.
  */
-public interface WallObject extends TileObject
-{
-	/**
-	 * A bitfield with the orientation of the first wall
-	 * 1 = West
-	 * 2 = North
-	 * 4 = East
-	 * 8 = South
-	 * 16 = North-west
-	 * 32 = North-east
-	 * 64 = South-east
-	 * 128 = South-west
-	 */
-	int getOrientationA();
+interface DecorativeObject : TileObject {
+    /**
+     * Gets the convex hull of the objects model.
+     *
+     * @return the convex hull
+     * @see net.runelite.api.model.Jarvis
+     */
+    val convexHull: Shape?
+    val convexHull2: Shape?
+    val renderable: Renderable?
+    val renderable2: Renderable?
 
-	/**
-	 * A bitfield with the orientation of the second wall
-	 * 1 = West
-	 * 2 = North
-	 * 4 = East
-	 * 8 = South
-	 * 16 = North-west
-	 * 32 = North-east
-	 * 64 = South-east
-	 * 128 = South-west
-	 */
-	int getOrientationB();
+    /**
+     * Decorative object x offset. This is added to the x position of the object, and is used to
+     * account for walls of varying widths.
+     */
+    val xOffset: Int
 
-	/**
-	 * A bitfield containing various flags:
-	 * <pre>{@code
-	 * object type id = bits & 0x20
-	 * orientation (0-3) = bits >>> 6 & 3
-	 * supports items = bits >>> 8 & 1
-	 * }</pre>
-	 */
-	int getConfig();
+    /**
+     * Decorative object y offset. This is added to the z position of the object, and is used to
+     * account for walls of varying widths.
+     */
+    val yOffset: Int
 
-	/**
-	 * Gets the convex hull of the objects model.
-	 *
-	 * @return the convex hull
-	 * @see net.runelite.api.model.Jarvis
-	 */
-	Shape getConvexHull();
-	Shape getConvexHull2();
+    /**
+     * A bitfield containing various flags:
+     * <pre>`object type id = bits & 0x20
+     * orientation (0-3) = bits >>> 6 & 3
+     * supports items = bits >>> 8 & 1
+    `</pre> *
+     */
+    val config: Int
 
-	Renderable getRenderable1();
-	Renderable getRenderable2();
+    companion object
 }

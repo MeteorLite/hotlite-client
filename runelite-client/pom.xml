@@ -526,6 +526,10 @@
 					</execution>
 				</executions>
 				<configuration>
+					<args>
+						<!-- Add compiler flags here -->
+						<arg>-Xcontext-receivers</arg>
+					</args>
 					<sourceDirs>
 						<sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
 					</sourceDirs>
