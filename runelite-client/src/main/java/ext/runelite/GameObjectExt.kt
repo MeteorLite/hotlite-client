@@ -42,11 +42,11 @@ object GameObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    fun GameObject.Companion.withIDs(vararg ids: Int) : List<GameObject> {
-        return Scene.objects.filterIsInstance<GameObject>().filter { it.isOf(*ids)}
+    fun GameObject.Companion.withID(vararg ids: Int) : List<GameObject> {
+        return Scene.objects<GameObject>().filter { it.isOf(*ids)}
     }
 
-    fun GameObject.Companion.withNames(vararg names: String) : List<GameObject> {
-        return Scene.objects.filterIsInstance<GameObject>().filter { it.isOf(*names)}
+    fun GameObject.Companion.withName(vararg names: String) : List<GameObject> {
+        return Scene.objects<GameObject>().filter { it.isOf(*names)}
     }
 }

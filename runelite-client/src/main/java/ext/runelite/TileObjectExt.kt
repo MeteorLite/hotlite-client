@@ -51,11 +51,11 @@ object TileObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    fun TileObject.Companion.withIDs(vararg ids: Int) : List<TileObject> {
-        return Scene.objects.filter { it.isOf(*ids)}
+    fun TileObject.Companion.withID(vararg ids: Int) : List<TileObject> {
+        return Scene.objects<TileObject>().filter { it.isOf(*ids)}
     }
 
-    fun TileObject.Companion.withNames(vararg names: String) : List<TileObject> {
-        return Scene.objects.filter { it.isOf(*names)}
+    fun TileObject.Companion.withName(vararg names: String) : List<TileObject> {
+        return Scene.objects<TileObject>().filter { it.isOf(*names)}
     }
 }

@@ -26,11 +26,11 @@ object DecorativeObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    fun DecorativeObject.Companion.withIDs(vararg ids: Int) : List<DecorativeObject> {
-        return Scene.objects.filterIsInstance<DecorativeObject>().filter { it.isOf(*ids)}
+    fun DecorativeObject.Companion.withID(vararg ids: Int) : List<DecorativeObject> {
+        return Scene.objects<DecorativeObject>().filter { it.isOf(*ids)}
     }
 
-    fun DecorativeObject.Companion.withNames(vararg names: String) : List<DecorativeObject> {
-        return Scene.objects.filterIsInstance<DecorativeObject>().filter { it.isOf(*names)}
+    fun DecorativeObject.Companion.withName(vararg names: String) : List<DecorativeObject> {
+        return Scene.objects<DecorativeObject>().filter { it.isOf(*names)}
     }
 }

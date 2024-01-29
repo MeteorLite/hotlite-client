@@ -27,11 +27,11 @@ object GroundObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    fun GroundObject.Companion.withIDs(vararg ids: Int) : List<GroundObject> {
-        return Scene.objects.filterIsInstance<GroundObject>().filter { it.isOf(*ids)}
+    fun GroundObject.Companion.withID(vararg ids: Int) : List<GroundObject> {
+        return Scene.objects<GroundObject>().filter { it.isOf(*ids)}
     }
 
-    fun GroundObject.Companion.withNames(vararg names: String) : List<GroundObject> {
-        return Scene.objects.filterIsInstance<GroundObject>().filter { it.isOf(*names)}
+    fun GroundObject.Companion.withName(vararg names: String) : List<GroundObject> {
+        return Scene.objects<GroundObject>().filter { it.isOf(*names)}
     }
 }

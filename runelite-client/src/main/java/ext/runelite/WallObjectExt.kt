@@ -27,11 +27,11 @@ object WallObjectExt {
         return filter { it.isOf(*names) }
     }
 
-    fun WallObject.Companion.withIDs(vararg ids: Int) : List<WallObject> {
-        return Scene.objects.filterIsInstance<WallObject>().filter { it.isOf(*ids)}
+    fun WallObject.Companion.withID(vararg ids: Int) : List<WallObject> {
+        return Scene.objects<WallObject>().filter { it.isOf(*ids)}
     }
 
-    fun WallObject.Companion.withNames(vararg names: String) : List<WallObject> {
-        return Scene.objects.filterIsInstance<WallObject>().filter { it.isOf(*names)}
+    fun WallObject.Companion.withName(vararg names: String) : List<WallObject> {
+        return Scene.objects<WallObject>().filter { it.isOf(*names)}
     }
 }

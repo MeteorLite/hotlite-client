@@ -14,40 +14,47 @@ import net.runelite.api.*
 object SceneExt {
     val client = Client::class.getInstance()
 
-    val Scene.Companion.objects : ArrayList<TileObject>
-        get() {
-            val objects = ArrayList<TileObject>()
-            client.scene.tiles.forEach { it?.forEach { it?.forEach {
-                it?.gameObjects?.forEach { objects.add(it) }
-                it?.decorativeObject?.let { objects.add(it) }
-                it?.groundObject?.let { objects.add(it) }
-                it?.wallObject?.let { objects.add(it) }
-            } }}
-            return objects
-        }
+    inline fun<reified T : TileObject> Scene.Companion.objects() : ArrayList<T> {
+        val objects = ArrayList<T>()
+        client.scene.tiles.forEach { it?.forEach { it?.forEach {
+            when (T::class) {
+                GameObject::class -> it?.gameObjects?.forEach { objects.add(it as T) }
+                DecorativeObject::class -> it?.decorativeObject?.let { objects.add(it as T) }
+                GroundObject::class -> it?.groundObject?.let { objects.add(it as T) }
+                WallObject::class -> it?.wallObject?.let { objects.add(it as T) }
+                TileObject::class -> {
+                    it?.gameObjects?.filterNotNull()?.forEach { objects.add(it as T) }
+                    it?.decorativeObject?.let { objects.add(it as T) }
+                    it?.groundObject?.let { objects.add(it as T) }
+                    it?.wallObject?.let { objects.add(it as T) }
+                }
+            }
+        } }}
+        return objects
+    }
 
     fun Scene.Companion.objectsWithID(vararg ids: Int) : List<TileObject> {
-        return objects.filter { it.isOf(*ids) }
+        return objects<TileObject>().filter { it.isOf(*ids) }
     }
 
     fun Scene.Companion.gameObjectsWithID(vararg ids: Int) : List<GameObject> {
-        return objects.filterIsInstance<GameObject>().filter { it.isOf(*ids) }
+        return objects<GameObject>().filter { it.isOf(*ids) }
     }
 
     fun Scene.Companion.groundObjectsWithID(vararg ids: Int) : List<GroundObject> {
-        return objects.filterIsInstance<GroundObject>().filter { it.isOf(*ids) }
+        return objects<GroundObject>().filter { it.isOf(*ids) }
     }
 
     fun Scene.Companion.wallObjectsWithID(vararg ids: Int) : List<WallObject> {
-        return objects.filterIsInstance<WallObject>().filter { it.isOf(*ids) }
+        return objects<WallObject>().filter { it.isOf(*ids) }
     }
 
     fun Scene.Companion.decorativeObjectsWithID(vararg ids: Int) : List<DecorativeObject> {
-        return objects.filterIsInstance<DecorativeObject>().filter { it.isOf(*ids) }
+        return objects<DecorativeObject>().filter { it.isOf(*ids) }
     }
 
     fun Scene.Companion.objectsWithName(vararg names: String) : List<TileObject> {
-        return objects.filter {
+        return objects<TileObject>().filter {
             names.contains(client.getObjectDefinition(it.id).name)
         }
     }

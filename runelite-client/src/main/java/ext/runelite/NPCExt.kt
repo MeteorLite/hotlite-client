@@ -32,11 +32,11 @@ object NPCExt {
         return EthanApiPlugin.getSkullIcon(this)
     }
 
-    fun<T: NPC> Iterable<T>.withIDs(vararg ids: Int) : List<T> {
+    fun<T: NPC> Iterable<T>.withID(vararg ids: Int) : List<T> {
         return filter { ids.contains(it.id) }
     }
 
-    fun<T: NPC> Iterable<T>.withNames(vararg names: String) : List<T> {
+    fun<T: NPC> Iterable<T>.withName(vararg names: String) : List<T> {
         return filter { it.composition.isOf(*names) }
     }
 }
