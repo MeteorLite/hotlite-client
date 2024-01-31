@@ -52,7 +52,7 @@ interface NPC : Actor {
      *
      * @return the composition
      */
-    val composition: NPCComposition
+    val composition: NPCComposition?
 
     /**
      * Get the composition for this NPC and transform it if required

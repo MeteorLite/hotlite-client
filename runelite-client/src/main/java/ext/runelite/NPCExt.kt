@@ -16,11 +16,11 @@ object NPCExt {
     }
 
     fun NPC.isOf(vararg ids: Int) : Boolean {
-        return composition.isOf(*ids)
+        return composition?.isOf(*ids) == true || ids.contains(id)
     }
 
     fun NPC.isOf(vararg names: String) : Boolean {
-        return composition.isOf(*names)
+        return composition?.isOf(*names) == true || names.contains(name)
     }
     
     fun NPC.getRawAnimation() : Int {
