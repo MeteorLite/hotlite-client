@@ -35,7 +35,6 @@ import java.awt.image.BufferedImage;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -71,9 +70,9 @@ public class FatalErrorDialog extends JDialog
 
 		try
 		{
-			setIconImages(Arrays.asList(ClientUI.ICON_128, ClientUI.ICON_16));
+			BufferedImage logo = ImageUtil.loadImageResource(FatalErrorDialog.class, "runelite_transparent.png");
+			setIconImage(logo);
 
-			BufferedImage logo = ImageUtil.loadImageResource(FatalErrorDialog.class, "runelite_splash.png");
 			JLabel runelite = new JLabel();
 			runelite.setIcon(new ImageIcon(logo));
 			runelite.setAlignmentX(Component.CENTER_ALIGNMENT);
