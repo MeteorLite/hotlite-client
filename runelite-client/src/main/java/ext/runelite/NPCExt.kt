@@ -36,11 +36,11 @@ object NPCExt {
     }
 
     fun<T: NPC> Iterable<T>.filterID(vararg ids: Int) : List<T> {
-        return filter { ids.contains(it.id) }
+        return filter { it.isOf(*ids) }
     }
 
     fun<T: NPC> Iterable<T>.filterName(vararg names: String) : List<T> {
-        return filter { it.composition.isOf(*names) }
+        return filter { it.isOf(*names) }
     }
 
     fun NPC.Companion.withID(vararg ids: Int) : List<NPC> {

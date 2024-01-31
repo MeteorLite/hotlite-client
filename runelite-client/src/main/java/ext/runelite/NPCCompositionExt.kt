@@ -7,10 +7,20 @@ import net.runelite.api.NPCComposition
 object NPCCompositionExt {
     val client = Client::class.getInstance()
     fun NPCComposition.isOf(vararg ids: Int) : Boolean {
-        return ids.contains(id) || ids.contains(this.transform().id)
+        if (ids.contains(id))
+            return true
+        this.configs?.let {
+            return this.transform()?.id?.let { ids.contains(it) } == true
+        }
+        return false
     }
 
     fun NPCComposition.isOf(vararg names: String) : Boolean {
-        return names.contains(name) || names.contains(this.transform().name)
+        if (names.contains(name))
+            return true
+        this.configs?.let {
+            return this.transform()?.name?.let { names.contains(it) } == true
+        }
+        return false
     }
 }
