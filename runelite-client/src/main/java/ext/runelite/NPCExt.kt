@@ -50,4 +50,8 @@ object NPCExt {
     fun NPC.Companion.withName(vararg names: String) : List<NPC> {
         return client.npcs.filter { it.isOf(*names) }
     }
+
+    fun NPC.Companion.forEach(task : (NPC) -> Unit) {
+        client.npcs.filterNotNull().forEach(task)
+    }
 }
