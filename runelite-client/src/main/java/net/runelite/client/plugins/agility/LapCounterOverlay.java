@@ -37,7 +37,6 @@ import net.runelite.api.Client;
 import net.runelite.api.Skill;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LineComponent;
 
 class LapCounterOverlay extends OverlayPanel
@@ -54,7 +53,7 @@ class LapCounterOverlay extends OverlayPanel
 	{
 		super(plugin);
 		setPosition(OverlayPosition.TOP_LEFT);
-		setPriority(OverlayPriority.LOW);
+		setPriority(PRIORITY_LOW);
 		this.plugin = plugin;
 		this.config = config;
 		this.client = client;
