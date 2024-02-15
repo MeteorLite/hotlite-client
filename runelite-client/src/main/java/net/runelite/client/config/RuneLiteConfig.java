@@ -235,15 +235,15 @@ public interface RuneLiteConfig extends Config
 	}
 
 	@Range(
-			min = 0,
-			max = 100
+		min = 0,
+		max = 100
 	)
 	@ConfigItem(
-			keyName = "notificationVolume",
-			name = "Notification volume",
-			description = "Configures the volume of custom notifications (does not control native volume).",
-			position = 24,
-			section = notificationSettings
+		keyName = "notificationVolume",
+		name = "Notification volume",
+		description = "Configures the volume of custom notifications (does not control native volume).",
+		position = 24,
+		section = notificationSettings
 	)
 	@Units(Units.PERCENT)
 	default int notificationVolume()
@@ -265,11 +265,11 @@ public interface RuneLiteConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "notificationGameMessage",
-			name = "Game message notifications",
-			description = "Adds a notification message to the chatbox",
-			position = 26,
-			section = notificationSettings
+		keyName = "notificationGameMessage",
+		name = "Game message notifications",
+		description = "Adds a notification message to the chatbox",
+		position = 26,
+		section = notificationSettings
 	)
 	default boolean enableGameMessageNotification()
 	{
@@ -277,11 +277,11 @@ public interface RuneLiteConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "flashNotification",
-			name = "Flash",
-			description = "Flashes the game frame as a notification",
-			position = 27,
-			section = notificationSettings
+		keyName = "flashNotification",
+		name = "Flash",
+		description = "Flashes the game frame as a notification",
+		position = 27,
+		section = notificationSettings
 	)
 	default FlashNotification flashNotification()
 	{
@@ -289,11 +289,11 @@ public interface RuneLiteConfig extends Config
 	}
 
 	@ConfigItem(
-			keyName = "notificationFocused",
-			name = "Send notifications when focused",
-			description = "Toggles all notifications for when the client is focused",
-			position = 28,
-			section = notificationSettings
+		keyName = "notificationFocused",
+		name = "Send notifications when focused",
+		description = "Toggles all notifications for when the client is focused",
+		position = 28,
+		section = notificationSettings
 	)
 	default boolean sendNotificationsWhenFocused()
 	{
@@ -302,11 +302,11 @@ public interface RuneLiteConfig extends Config
 
 	@Alpha
 	@ConfigItem(
-			keyName = "notificationFlashColor",
-			name = "Notification Flash",
-			description = "Sets the color of the notification flashes.",
-			position = 29,
-			section = notificationSettings
+		keyName = "notificationFlashColor",
+		name = "Notification Flash",
+		description = "Sets the color of the notification flashes.",
+		position = 29,
+		section = notificationSettings
 	)
 	default Color notificationFlashColor()
 	{

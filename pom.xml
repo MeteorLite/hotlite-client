@@ -28,7 +28,7 @@
 
 	<groupId>net.runelite</groupId>
 	<artifactId>runelite-parent</artifactId>
-	<version>1.10.21.2</version>
+	<version>1.10.22</version>
 	<packaging>pom</packaging>
 
 	<name>RuneLite</name>
@@ -46,8 +46,8 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<checkstyle.skip>true</checkstyle.skip>
 		<glslang.path></glslang.path>
+		<rs.version>220</rs.version>
 
-		<rs.version>219</rs.version>
 		<!--HotLite-->
 		<kotlin.version>1.9.22</kotlin.version>
 	</properties>
@@ -65,7 +65,7 @@
 		<url>https://github.com/runelite/runelite</url>
 		<connection>scm:git:git://github.com/runelite/runelite</connection>
 		<developerConnection>scm:git:git@github.com:runelite/runelite</developerConnection>
-		<tag>runelite-parent-1.10.21.2</tag>
+		<tag>runelite-parent-1.10.22</tag>
 	</scm>
 
 	<developers>
