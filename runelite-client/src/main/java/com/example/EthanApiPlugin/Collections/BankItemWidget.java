@@ -480,9 +480,6 @@ public class BankItemWidget implements Widget {
         return actions;
     }
 
-    public Widget createStaticChild(int type) {
-        return null;
-    }
 
     @Override
     public Widget createChild(int index, int type) {

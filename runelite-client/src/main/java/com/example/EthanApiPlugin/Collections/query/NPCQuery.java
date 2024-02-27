@@ -2,7 +2,12 @@ package com.example.EthanApiPlugin.Collections.query;
 
 import com.example.EthanApiPlugin.Collections.Players;
 import com.example.EthanApiPlugin.EthanApiPlugin;
-import net.runelite.api.*;
+import com.example.EthanApiPlugin.PathFinding.GlobalCollisionMap;
+import com.example.EthanApiPlugin.Utility.WorldAreaUtility;
+import net.runelite.api.Actor;
+import net.runelite.api.Client;
+import net.runelite.api.NPC;
+import net.runelite.api.NPCComposition;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.RuneLite;
@@ -89,7 +94,7 @@ public class NPCQuery {
         return this;
     }
 
-    public NPCQuery withinBounds(WorldPoint min, WorldPoint max){
+    public NPCQuery withinBounds(WorldPoint min, WorldPoint max) {
         int x1 = min.getX();
         int x2 = max.getX();
         int y1 = min.getY();
@@ -141,8 +146,19 @@ public class NPCQuery {
         npcs = npcs.stream().filter(npc -> !npc.isInteracting()).collect(Collectors.toList());
         return this;
     }
-    public NPCQuery noOneInteractingWith(){
+
+    public NPCQuery noOneInteractingWith() {
         npcs = npcs.stream().filter(npc -> Players.search().interactingWith(npc).isEmpty()).collect(Collectors.toList());
+        return this;
+    }
+
+    public NPCQuery playerInteractingWith() {
+        npcs = npcs.stream().filter(npc -> client.getLocalPlayer().isInteracting() && client.getLocalPlayer().getInteracting() == npc).collect(Collectors.toList());
+        return this;
+    }
+
+    public NPCQuery playerNotInteractingWith() {
+        npcs = npcs.stream().filter(npc -> !client.getLocalPlayer().isInteracting() || client.getLocalPlayer().getInteracting() != npc).collect(Collectors.toList());
         return this;
     }
 
@@ -188,5 +204,30 @@ public class NPCQuery {
             return npc.getComposition();
         }
         return npc.getTransformedComposition();
+    }
+
+    public Optional<NPC> nearestByPath() {
+        HashMap<WorldPoint, NPC> npcMap = new HashMap<>();
+        for (NPC npc : npcs) {
+            for (WorldPoint wp : npc.getWorldArea().toWorldPointList()) {
+                npcMap.put(wp, npc);
+            }
+
+            for (WorldPoint wp : WorldAreaUtility.objectInteractableTiles(npc)) {
+                npcMap.put(wp, npc);
+            }
+        }
+        List<WorldPoint> path = EthanApiPlugin.pathToGoalSetFromPlayerNoCustomTiles(new HashSet<>(npcMap.keySet()));
+        if (path == null) {
+            return Optional.empty();
+        }
+        if (path.isEmpty()) {
+            if (npcMap.containsKey(client.getLocalPlayer().getWorldLocation())) {
+                return Optional.ofNullable(npcMap.get(client.getLocalPlayer().getWorldLocation()));
+            } else {
+                return Optional.empty();
+            }
+        }
+        return Optional.ofNullable(npcMap.get(path.get(path.size() - 1)));
     }
 }
