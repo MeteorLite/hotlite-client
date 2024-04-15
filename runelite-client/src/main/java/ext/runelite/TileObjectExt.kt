@@ -1,6 +1,5 @@
 package ext.runelite
 
-import com.example.InteractionApi.TileObjectInteraction
 import ext.java.Graphics2DExt.drawColor
 import ext.java.Graphics2DExt.fillColor
 import ext.kotlin.KClassExt.getInstance
@@ -14,9 +13,6 @@ import java.awt.Graphics2D
 
 object TileObjectExt {
     val client = Client::class.getInstance()
-    fun TileObject.interact(vararg actions: String) {
-        TileObjectInteraction.interact(this, *actions)
-    }
 
     fun TileObject.renderTile(graphics: Graphics2D,
                          drawBounds: Boolean = true,
