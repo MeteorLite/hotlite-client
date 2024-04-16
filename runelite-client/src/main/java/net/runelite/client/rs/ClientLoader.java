@@ -54,7 +54,6 @@ import java.util.jar.JarInputStream;
 import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 
-import hotlite.patch.PatchManager;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.RuneLite;
