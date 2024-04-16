@@ -168,10 +168,6 @@ public class ClientLoader implements Supplier<Applet>
 				// create the classloader for the jar while we hold the lock, and eagerly load and link all classes
 				// in the jar. Otherwise the jar can change on disk and can break future classloads.
 				classLoader = createJarClassLoader(jarFile);
-
-				if (PATCHED_CACHE.exists()) {
-					PatchManager.INSTANCE.init(PATCHED_CACHE.getAbsolutePath(), classLoader);
-				}
 			}
 
 			SplashScreen.stage(.465, "Starting", "Starting Old School RuneScape");
