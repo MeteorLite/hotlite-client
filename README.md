@@ -9,7 +9,8 @@ hotlite-client provides a Build/Export run config to update a hotlite-client bui
 If there is no exported hotlite for the current runelite release, a warning box will inform the user, and vanilla runelite will be launched instead.  
   
 Kotlin 1.9.22 support is bundled into the launcher/client.  
-Ethans API is bundled.  
+  
+### HotLite is compliant out of the box. That being said there is nothing really stopping you from cheating in RuneLite or here anyways.
 
 # runelite [![CI](https://github.com/runelite/runelite/workflows/CI/badge.svg)](https://github.com/runelite/runelite/actions?query=workflow%3ACI+branch%3Amaster) [![Discord](https://img.shields.io/discord/301497432909414422.svg)](https://discord.gg/ArdAhnN)
 
