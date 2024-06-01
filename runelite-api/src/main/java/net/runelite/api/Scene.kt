@@ -25,9 +25,9 @@
 package net.runelite.api
 
 /**
- * Represents the entire 3D scene
+ * Represents a 3D scene
  */
-interface Scene {
+interface Scene : Renderable {
     /**
      * Gets the tiles in the scene
      *
@@ -44,7 +44,15 @@ interface Scene {
      * Get the extended tile settings. This is larger than 104x104, and its size is [Constants.EXTENDED_SCENE_SIZE].
      */
     val extendedTileSettings: Array<Array<ByteArray?>?>?
+
     var drawDistance: Int
+
+    /**
+     * Get the world view id of this scene
+     * @return the world view id, or -1 if this is the top level scene
+     */
+    val worldViewId: Int
+
     /**
      * Get the minimum scene level which will be rendered
      *
@@ -68,7 +76,9 @@ interface Scene {
      * @param gameObject
      */
     fun removeGameObject(gameObject: GameObject?)
+
     fun generateHouses()
+
     fun setRoofRemovalMode(flags: Int)
 
     /**
