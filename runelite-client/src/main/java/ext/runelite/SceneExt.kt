@@ -1,5 +1,6 @@
 package ext.runelite
 
+import com.example.EthanApiPlugin.EthanApiPlugin
 import ext.kotlin.KClassExt.getInstance
 import ext.runelite.DecorativeObjectExt.isOf
 import ext.runelite.DequeExt.withID
@@ -78,5 +79,9 @@ object SceneExt {
 
     fun Scene.Companion.projectilesWithID(vararg ids: Int) : List<Projectile> {
         return client.projectiles.withID(*ids)
+    }
+
+    fun Scene.containsRegion(regionID: Int) : Boolean {
+        return EthanApiPlugin.inRegion(regionID)
     }
 }

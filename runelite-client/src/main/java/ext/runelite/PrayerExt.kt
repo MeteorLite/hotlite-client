@@ -1,5 +1,10 @@
 package ext.runelite
 
-object PrayerExt {
+import net.runelite.api.Client
+import net.runelite.api.Prayer
 
+object PrayerExt {
+    fun Prayer.blah() {
+
+    }
 }

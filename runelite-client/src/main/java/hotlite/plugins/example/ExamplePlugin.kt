@@ -1,7 +1,15 @@
 package hotlite.plugins.example
 
+import com.example.EthanApiPlugin.Collections.query.QuickPrayer
+import com.example.EthanApiPlugin.EthanApiPlugin
 import com.google.inject.Inject
 import com.google.inject.Provides
+import ext.ethans.QuickPrayerExt.isActive
+import ext.runelite.NPCExt.getTrueAnimation
+import ext.runelite.PlayerExt.getSkullIcon
+import ext.runelite.PluginExt.getClient
+import ext.runelite.PluginExt.getInjectedInstance
+import net.runelite.api.Prayer
 import net.runelite.api.events.GameTick
 import net.runelite.client.config.ConfigManager
 import net.runelite.client.eventbus.Subscribe

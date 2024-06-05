@@ -1,5 +1,6 @@
 package ext.runelite
 
+import com.example.EthanApiPlugin.EthanApiPlugin
 import ext.kotlin.KClassExt.getInstance
 import ext.runelite.NPCCompositionExt.isOf
 import net.runelite.api.Client
@@ -34,5 +35,9 @@ object NPCExt {
 
     fun NPC.Companion.forEach(task : (NPC) -> Unit) {
         client.npcs.filterNotNull().forEach(task)
+    }
+
+    fun NPC.getTrueAnimation() : Int {
+        return EthanApiPlugin.getAnimation(this)
     }
 }
