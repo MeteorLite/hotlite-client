@@ -31,5 +31,8 @@ jobs:
           distribution: temurin
           java-version: 11
 
+      - name: Publish Ethans to local
+        run: ./ci/local.sh
+
       - name: Build
         run: ./ci/build.sh
