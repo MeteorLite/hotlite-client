@@ -46,6 +46,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager2;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -64,7 +65,9 @@ import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.function.Function;
 import javax.annotation.Nonnull;
@@ -114,7 +117,6 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ClientShutdown;
 import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.input.KeyManager;
 import net.runelite.client.input.MouseAdapter;
 import net.runelite.client.input.MouseListener;
 import net.runelite.client.input.MouseManager;
@@ -137,13 +139,13 @@ public class ClientUI
 	private static final String CONFIG_CLIENT_BOUNDS = "clientBounds";
 	private static final String CONFIG_CLIENT_MAXIMIZED = "clientMaximized";
 	private static final String CONFIG_CLIENT_SIDEBAR_CLOSED = "clientSidebarClosed";
-	public static final BufferedImage ICON = ImageUtil.loadImageResource(ClientUI.class, "/runelite.png");
+	public static final BufferedImage ICON_128 = ImageUtil.loadImageResource(ClientUI.class, "runelite_128.png");
+	public static final BufferedImage ICON_16 = ImageUtil.loadImageResource(ClientUI.class, "runelite_16.png");
 
 	@Getter
 	private TrayIcon trayIcon;
 
 	private final RuneLiteConfig config;
-	private final KeyManager keyManager;
 	private final MouseManager mouseManager;
 	private final Applet client;
 	private final ConfigManager configManager;
@@ -182,6 +184,8 @@ public class ClientUI
 	@Named("recommendedMemoryLimit")
 	private int recommendedMemoryLimit = 512;
 
+	private List<KeyListener> keyListeners;
+
 	@RequiredArgsConstructor
 	private static class HistoryEntry
 	{
@@ -191,26 +195,23 @@ public class ClientUI
 
 	@Inject
 	private ClientUI(
-		RuneLiteConfig config,
-		KeyManager keyManager,
-		MouseManager mouseManager,
-		@Nullable Applet client,
-		ConfigManager configManager,
-		Provider<ClientThread> clientThreadProvider,
-		EventBus eventBus,
-		@Named("safeMode") boolean safeMode,
-		@Named("runelite.title") String title
+			RuneLiteConfig config,
+			MouseManager mouseManager,
+			@Nullable Applet client,
+			ConfigManager configManager,
+			Provider<ClientThread> clientThreadProvider,
+			EventBus eventBus,
+			@Named("safeMode") boolean safeMode,
+			@Named("runelite.title") String title
 	)
 	{
 		this.config = config;
-		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.client = client;
 		this.configManager = configManager;
 		this.clientThreadProvider = clientThreadProvider;
 		this.eventBus = eventBus;
 		this.safeMode = safeMode;
-		title = "HotLite " + RuneLiteProperties.getVersion();
 		this.title = title + (safeMode ? " (safe mode)" : "");
 
 		normalBoundsTimer = new Timer(250, _ev -> setLastNormalBounds());
@@ -221,8 +222,8 @@ public class ClientUI
 	private void onConfigChanged(ConfigChanged event)
 	{
 		if (!event.getGroup().equals(CONFIG_GROUP) ||
-			event.getKey().equals(CONFIG_CLIENT_MAXIMIZED) ||
-			event.getKey().equals(CONFIG_CLIENT_BOUNDS))
+				event.getKey().equals(CONFIG_CLIENT_MAXIMIZED) ||
+				event.getKey().equals(CONFIG_CLIENT_BOUNDS))
 		{
 			return;
 		}
@@ -247,7 +248,7 @@ public class ClientUI
 		Icon icon = new ImageIcon(ImageUtil.resizeImage(navBtn.getIcon(), TAB_SIZE, TAB_SIZE));
 
 		sidebar.insertTab(null, icon, navBtn.getPanel().getWrappedPanel(), navBtn.getTooltip(),
-			sidebarEntries.headSet(navBtn).size());
+				sidebarEntries.headSet(navBtn).size());
 		// insertTab changes the selected index when the first tab is inserted, avoid this
 		if (sidebar.getTabCount() == 1)
 		{
@@ -269,8 +270,8 @@ public class ClientUI
 			if (closingOpenTab)
 			{
 				HistoryEntry entry = selectedTabHistory.isEmpty()
-					? new HistoryEntry(true, null)
-					: selectedTabHistory.removeLast();
+						? new HistoryEntry(true, null)
+						: selectedTabHistory.removeLast();
 
 				openPanel(entry.navBtn, entry.sidebarOpen);
 			}
@@ -336,7 +337,7 @@ public class ClientUI
 			OSXUtil.tryEnableFullscreen(frame);
 
 			frame.setTitle(title);
-			frame.setIconImage(ICON);
+			frame.setIconImages(Arrays.asList(ICON_128, ICON_16));
 			frame.setLocationRelativeTo(frame.getOwner());
 			frame.setResizable(true);
 
@@ -346,7 +347,7 @@ public class ClientUI
 				// Change the default quit strategy to CLOSE_ALL_WINDOWS so that ctrl+q
 				// triggers the listener below instead of exiting.
 				Desktop.getDesktop()
-					.setQuitStrategy(QuitStrategy.CLOSE_ALL_WINDOWS);
+						.setQuitStrategy(QuitStrategy.CLOSE_ALL_WINDOWS);
 			}
 			frame.addWindowListener(new WindowAdapter()
 			{
@@ -360,10 +361,10 @@ public class ClientUI
 						try
 						{
 							result = JOptionPane.showConfirmDialog(
-								frame,
-								"Are you sure you want to exit?", "Exit",
-								JOptionPane.OK_CANCEL_OPTION,
-								JOptionPane.QUESTION_MESSAGE);
+									frame,
+									"Are you sure you want to exit?", "Exit",
+									JOptionPane.OK_CANCEL_OPTION,
+									JOptionPane.QUESTION_MESSAGE);
 						}
 						catch (Exception e)
 						{
@@ -438,6 +439,11 @@ public class ClientUI
 					{
 						SwingUtil.activate(newSelectedTab.getPanel());
 					}
+
+					if (newSelectedTab == null)
+					{
+						giveClientFocus();
+					}
 				}
 			});
 			sidebar.addMouseListener(new java.awt.event.MouseAdapter()
@@ -476,27 +482,24 @@ public class ClientUI
 			frame.setContentPane(content);
 
 			// Add key listener
-			final HotkeyListener sidebarListener = new HotkeyListener(config::sidebarToggleKey)
-			{
-				@Override
-				public void hotkeyPressed()
-				{
-					toggleSidebar();
-				}
-			};
-			sidebarListener.setEnabledOnLoginScreen(true);
-			keyManager.registerKeyListener(sidebarListener);
-
-			final HotkeyListener pluginPanelListener = new HotkeyListener(config::panelToggleKey)
-			{
-				@Override
-				public void hotkeyPressed()
-				{
-					togglePluginPanel();
-				}
-			};
-			pluginPanelListener.setEnabledOnLoginScreen(true);
-			keyManager.registerKeyListener(pluginPanelListener);
+			keyListeners = List.of(
+					new HotkeyListener(config::sidebarToggleKey)
+					{
+						@Override
+						public void hotkeyPressed()
+						{
+							toggleSidebar();
+						}
+					},
+					new HotkeyListener(config::panelToggleKey)
+					{
+						@Override
+						public void hotkeyPressed()
+						{
+							togglePluginPanel();
+						}
+					});
+			KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this::dispatchWindowKeyEvent);
 
 			frame.addWindowFocusListener(new WindowFocusListener()
 			{
@@ -589,18 +592,18 @@ public class ClientUI
 				applyCustomChromeBorder();
 
 				sidebarNavBtn = toolbarPanel.add(NavigationButton
-					.builder()
-					.priority(100)
-					.icon(sidebarCloseIcon)
-					.tooltip("Close sidebar")
-					.onClick(this::toggleSidebar)
-					.build(), false);
+						.builder()
+						.priority(100)
+						.icon(sidebarCloseIcon)
+						.tooltip("Close sidebar")
+						.onClick(this::toggleSidebar)
+						.build(), false);
 			}
 			else
 			{
 				sidebar.putClientProperty(
-					FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT,
-					toolbarPanel.createSidebarPanel());
+						FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT,
+						toolbarPanel.createSidebarPanel());
 			}
 
 			// Update config
@@ -617,8 +620,8 @@ public class ClientUI
 	private void applyCustomChromeBorder()
 	{
 		content.setBorder((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH
-			? null
-			: new MatteBorder(4, 4, 4, 4, ColorScheme.DARKER_GRAY_COLOR));
+				? null
+				: new MatteBorder(4, 4, 4, 4, ColorScheme.DARKER_GRAY_COLOR));
 	}
 
 	public void show()
@@ -633,7 +636,7 @@ public class ClientUI
 			// Create tray icon (needs to be created after frame is packed)
 			if (config.enableTrayIcon())
 			{
-				trayIcon = createTrayIcon(ICON, title, frame);
+				trayIcon = createTrayIcon(ICON_16, title, frame);
 			}
 
 			// Move frame around (needs to be done after frame is packed)
@@ -648,10 +651,10 @@ public class ClientUI
 					Rectangle clientBounds = frame.getBounds();
 
 					clientBounds = new Rectangle(
-						clientBounds.x + insets.left,
-						clientBounds.y + insets.top,
-						clientBounds.width - (insets.left + insets.right),
-						clientBounds.height - (insets.top + insets.bottom)
+							clientBounds.x + insets.left,
+							clientBounds.y + insets.top,
+							clientBounds.width - (insets.left + insets.right),
+							clientBounds.height - (insets.top + insets.bottom)
 					);
 
 					// Check that the bounds are contained inside a valid display
@@ -659,7 +662,7 @@ public class ClientUI
 					if (gc == null)
 					{
 						log.info("Reset client position. Client bounds: {}x{}x{}x{}",
-							clientBounds.x, clientBounds.y, clientBounds.width, clientBounds.height);
+								clientBounds.x, clientBounds.y, clientBounds.width, clientBounds.height);
 						// Reset the position, but not the size
 						frame.setLocationRelativeTo(frame.getOwner());
 					}
@@ -699,17 +702,17 @@ public class ClientUI
 			if (!Strings.isNullOrEmpty(RuneLiteProperties.getLauncherVersion()))
 			{
 				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-					"RuneLite has not yet been updated to work with the latest\n"
-						+ "game update, it will work with reduced functionality until then.",
-					"RuneLite is outdated", INFORMATION_MESSAGE));
+						"RuneLite has not yet been updated to work with the latest\n"
+								+ "game update, it will work with reduced functionality until then.",
+						"RuneLite is outdated", INFORMATION_MESSAGE));
 			}
 			else
 			{
 				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(frame,
-					"RuneLite is outdated and is not compatible with the latest game update.\n"
-						+ "If you are doing pluginhub development, update the runeliteVersion property in build.gradle."
-						+ " Otherwise, git pull and rebuild.",
-					"RuneLite is outdated", ERROR_MESSAGE));
+						"RuneLite is outdated and is not compatible with the latest game update.\n"
+								+ "If you are doing pluginhub development, update the runeliteVersion property in build.gradle."
+								+ " Otherwise, git pull and rebuild.",
+						"RuneLite is outdated", ERROR_MESSAGE));
 			}
 		}
 
@@ -719,9 +722,9 @@ public class ClientUI
 			SwingUtilities.invokeLater(() ->
 			{
 				JEditorPane ep = new JEditorPane("text/html",
-					"Your Java memory limit is " + maxMemory + "mb, which is lower than the recommended " + recommendedMemoryLimit + "mb.<br>" +
-						"This can cause instability, and it is recommended you remove or increase this limit.<br>" +
-						"Join <a href=\"" + RuneLiteProperties.getDiscordInvite() + "\">Discord</a> for assistance."
+						"Your Java memory limit is " + maxMemory + "mb, which is lower than the recommended " + recommendedMemoryLimit + "mb.<br>" +
+								"This can cause instability, and it is recommended you remove or increase this limit.<br>" +
+								"Join <a href=\"" + RuneLiteProperties.getDiscordInvite() + "\">Discord</a> for assistance."
 				);
 				ep.addHyperlinkListener(e ->
 				{
@@ -733,9 +736,40 @@ public class ClientUI
 				ep.setEditable(false);
 				ep.setOpaque(false);
 				JOptionPane.showMessageDialog(frame,
-					ep, "Max memory limit low", JOptionPane.WARNING_MESSAGE);
+						ep, "Max memory limit low", JOptionPane.WARNING_MESSAGE);
 			});
 		}
+	}
+
+	private boolean dispatchWindowKeyEvent(KeyEvent ev)
+	{
+		if (!frame.isFocused())
+		{
+			return false;
+		}
+
+		for (var listener : keyListeners)
+		{
+			switch (ev.getID())
+			{
+				case KeyEvent.KEY_TYPED:
+					listener.keyTyped(ev);
+					break;
+				case KeyEvent.KEY_PRESSED:
+					listener.keyPressed(ev);
+					break;
+				case KeyEvent.KEY_RELEASED:
+					listener.keyReleased(ev);
+					break;
+			}
+
+			if (ev.isConsumed())
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void logGraphicsEnvironment()
@@ -1011,15 +1045,15 @@ public class ClientUI
 		// Offset sidebar button if resizable mode logout is visible
 		final Widget logoutButton = client.getWidget(ComponentID.RESIZABLE_VIEWPORT_BOTTOM_LINE_LOGOUT_BUTTON_OVERLAY);
 		final int y = logoutButton != null && !logoutButton.isHidden() && logoutButton.getParent() != null
-			? logoutButton.getHeight() + logoutButton.getRelativeY()
-			: 5;
+				? logoutButton.getHeight() + logoutButton.getRelativeY()
+				: 5;
 
 		final BufferedImage image = sidebar.isVisible() ? sidebarCloseIcon : sidebarOpenIcon;
 
 		final Rectangle sidebarButtonRange = new Rectangle(x - 15, 0, image.getWidth() + 25, client.getRealDimensions().height);
 		final Point mousePosition = new Point(
-			client.getMouseCanvasPosition().getX() + client.getViewportXOffset(),
-			client.getMouseCanvasPosition().getY() + client.getViewportYOffset());
+				client.getMouseCanvasPosition().getX() + client.getViewportXOffset(),
+				client.getMouseCanvasPosition().getY() + client.getViewportYOffset());
 
 		if (sidebarButtonRange.contains(mousePosition.getX(), mousePosition.getY()))
 		{
@@ -1089,6 +1123,11 @@ public class ClientUI
 			{
 				SwingUtil.deactivate(selectedTab.getPanel());
 			}
+		}
+
+		if (!open)
+		{
+			giveClientFocus();
 		}
 
 		if (sidebarNavBtn != null)
@@ -1169,7 +1208,7 @@ public class ClientUI
 		}
 
 		if (frame.getGraphicsConfiguration().getDevice().getFullScreenWindow() == null
-			&& !safeMode)
+				&& !safeMode)
 		{
 			frame.setOpacity(config.windowOpacity() / 100.0f);
 		}
@@ -1402,6 +1441,7 @@ public class ClientUI
 	{
 		private int prevState;
 		private int previousContentWidth;
+		private boolean doingLayout;
 
 		@Override
 		public void addLayoutComponent(String name, Component comp)
@@ -1477,8 +1517,8 @@ public class ClientUI
 
 			// adjust sidebar height first, as changing it's height can make it's min width change too
 			int innerHeight = Math.max(content.getHeight() - insetHeight, Math.max(
-				client.getMinimumSize().height,
-				sidebar.getMinimumSize().height));
+					client.getMinimumSize().height,
+					sidebar.getMinimumSize().height));
 			{
 				sidebar.setSize(sidebar.getWidth(), innerHeight);
 			}
@@ -1494,11 +1534,11 @@ public class ClientUI
 			final int clientMinWidth = client.getMinimumSize().width;
 			int clientWidth = Math.max(client.getWidth(), clientMinWidth);
 			int sidebarWidth = sidebar.isVisible()
-				? sidebar.getPreferredSize().width
-				: 0;
+					? sidebar.getPreferredSize().width
+					: 0;
 
 			boolean keepGameSize = (frame.getExtendedState() & Frame.MAXIMIZED_HORIZ) == 0
-				&& (config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE || forceSizingClient);
+					&& (config.automaticResizeType() == ExpandResizeType.KEEP_GAME_SIZE || forceSizingClient);
 
 			if (keepGameSize)
 			{
@@ -1524,9 +1564,24 @@ public class ClientUI
 			Rectangle oldBounds = frame.getBounds();
 			frame.revalidateMinimumSize();
 			if ((OSType.getOSType() != OSType.Windows || (changed & Frame.MAXIMIZED_BOTH) == 0)
-				&& !frame.getPreferredSize().equals(oldBounds.getSize()))
+					&& !frame.getPreferredSize().equals(oldBounds.getSize()))
 			{
 				frame.containedSetSize(frame.getPreferredSize(), oldBounds);
+				if (!doingLayout)
+				{
+					try
+					{
+						// synchronously layout the frame and it's root pane so we don't get re-layouted
+						// with the root pane's old size before it gets layouted automatically. This can
+						// call us recursively if we calculate size wrong, so don't do that.
+						doingLayout = true;
+						frame.validate();
+					}
+					finally
+					{
+						doingLayout = false;
+					}
+				}
 			}
 
 			log.trace("finishing layout - content={} client={} sidebar={} frame={}", content.getWidth(), client.getWidth(), sidebar.getWidth(), frame.getWidth());
